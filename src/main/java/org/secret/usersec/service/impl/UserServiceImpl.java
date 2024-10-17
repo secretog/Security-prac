@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
                 .map(userReadMapper::toDto);
     }
 
+    @Transactional
     public UserReadDto createUser(UserCreateDto userCreateDto) {
         return Optional.of(userCreateDto)
                 .map(userCreateMapper::toEntity)
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow();
     }
 
+    @Transactional
     public boolean deleteUser(Long id) {
         return userRepository.findById(id)
                 .map(entity -> {
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
                 .orElse(false);
     }
 
+    @Transactional
     public Optional<UserReadDto> updateUser(Long id, UserCreateDto userDto) {
         Optional<User> byId = userRepository.findById(id);
         if (byId.isPresent()) {
